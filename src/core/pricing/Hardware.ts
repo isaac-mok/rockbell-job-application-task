@@ -1,9 +1,7 @@
-export type Hardware = 'M2-Max' | 'D1 Desktop' | 'D4-503'
+export type Hardware = keyof typeof hardwarePrices
 
-export function hardwarePrice (hardware: Hardware): number {
-  switch (hardware) {
-    case 'M2-Max': return 1050
-    case 'D1 Desktop': return 1299
-    case 'D4-503': return 2199
-  }
+export const hardwarePrices = {
+  M2Max: 1050,
+  D1_Desktop: 1299,
+  D4503: 2199
 }

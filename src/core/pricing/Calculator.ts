@@ -1,5 +1,5 @@
-import { cashDrawer, CashierSubscriptionMonths, cashierSubscriptionPrice as calculateCashierSubscriptionPrice, implementation } from "./AddOns";
-import { Hardware, hardwarePrice as calculateHardwarePrice } from "./Hardware";
+import { cashDrawer, CashierSubscriptionMonths, cashierSubscriptionPrices, implementation } from "./AddOns";
+import { Hardware, hardwarePrices } from "./Hardware";
 import { InstallmentMonths, adminFeesPercentage } from "./Installment";
 
 export interface Prices {
@@ -13,7 +13,7 @@ export interface Prices {
 }
 
 export function calculator (hardware: Hardware, addOns: AddOns, installmentMonths?: InstallmentMonths): Prices {
-  const hardwarePrice = calculateHardwarePrice(hardware)
+  const hardwarePrice = hardwarePrices[hardware]
   const addOnsPrice = calculateAddOnsPrice(addOns)
 
   const basePrice = hardwarePrice + addOnsPrice
@@ -40,7 +40,7 @@ function calculateAddOnsPrice (addOns: AddOns) {
     : 0
   
   const cashierSubscriptionPrice = addOns.cashierSubscriptionMonths !== undefined
-    ? calculateCashierSubscriptionPrice(addOns.cashierSubscriptionMonths)
+    ? cashierSubscriptionPrices[addOns.cashierSubscriptionMonths]
     : 0
 
   const implementationPrice = addOns.implementation !== undefined && addOns.implementation
