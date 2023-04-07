@@ -1,15 +1,17 @@
-import { cashDrawer, CashierSubscriptionMonths, cashierSubscriptionPrices, implementation } from "./AddOns";
-import { Hardware, hardwarePrices } from "./Hardware";
-import { InstallmentMonths, adminFeesPercentage } from "./Installment";
+import { cashDrawer, type CashierSubscriptionMonths, cashierSubscriptionPrices, implementation } from './AddOns'
+import { type Hardware, hardwarePrices } from './Hardware'
+import { type InstallmentMonths, adminFeesPercentage } from './Installment'
 
 export interface Prices {
-  basePrice: number,
-  installment: {
-    total: number,
-    monthly: number,
-  },
+  basePrice: number
+  installment: Installment
   monthlyPrice: number | undefined
   finalPrice: number
+}
+
+interface Installment {
+  total: number
+  monthly: number
 }
 
 export function calculator (hardware: Hardware, addOns: AddOns, installmentMonths?: InstallmentMonths): Prices {
@@ -34,11 +36,11 @@ export function calculator (hardware: Hardware, addOns: AddOns, installmentMonth
   }
 }
 
-function calculateAddOnsPrice (addOns: AddOns) {
+function calculateAddOnsPrice (addOns: AddOns): number {
   const cashDrawerPrice = addOns.cashDrawer !== undefined && addOns.cashDrawer
     ? cashDrawer
     : 0
-  
+
   const cashierSubscriptionPrice = addOns.cashierSubscriptionMonths !== undefined
     ? cashierSubscriptionPrices[addOns.cashierSubscriptionMonths]
     : 0
@@ -50,7 +52,7 @@ function calculateAddOnsPrice (addOns: AddOns) {
   return cashDrawerPrice + cashierSubscriptionPrice + implementationPrice
 }
 
-function calculateInstallment (basePrice: number, installmentMonths?: InstallmentMonths) {
+function calculateInstallment (basePrice: number, installmentMonths?: InstallmentMonths): Installment {
   if (installmentMonths === undefined) {
     return {
       total: 0,
@@ -60,7 +62,7 @@ function calculateInstallment (basePrice: number, installmentMonths?: Installmen
 
   const total = basePrice * adminFeesPercentage / 100
   const monthly = total / installmentMonths
-  
+
   return {
     total,
     monthly
@@ -68,7 +70,7 @@ function calculateInstallment (basePrice: number, installmentMonths?: Installmen
 }
 
 type AddOns = Partial<{
-  cashDrawer: boolean,
-  cashierSubscriptionMonths: CashierSubscriptionMonths,
-  implementation: boolean,
+  cashDrawer: boolean
+  cashierSubscriptionMonths: CashierSubscriptionMonths
+  implementation: boolean
 }>
